@@ -5,9 +5,9 @@ project (${PRJ_NAME})
 ####################### For Users to modify ##########################
 # Adjust MCU Density in use, see CMSIS file "stm32f10x.h"
 #STM32F103RBT (128KB FLASH, 20KB RAM) --> STM32F10X_MD
-#set (MCU_DENSITY STM32F10X_MD)
+set (MCU_DENSITY STM32F10X_MD)
 #STM32F103RET (512KB FLASH, 64KB RAM) --> STM32F10X_HD
-set (MCU_DENSITY STM32F10X_HD)
+#set (MCU_DENSITY STM32F10X_HD)
 # select the build type for this lib project (release recommanded)
 #set (CMAKE_BUILD_TYPE Release)
 set (CMAKE_BUILD_TYPE Debug)
