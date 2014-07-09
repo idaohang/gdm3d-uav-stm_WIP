@@ -34,14 +34,16 @@
 //#define led2_gpio                   GPIOE
 //#define led2_pin                    (GPIO_Pin_3)
 
-// modified by roice, 20140704
-#define led1_rcc                    RCC_APB2Periph_GPIOA
-#define led1_gpio                   GPIOA
-#define led1_pin                    (GPIO_Pin_4)
+// modified by roice, 20140708
+// led1 and led2 are set to a same GPIO because the board
+// has only one blinky LED
+#define led1_rcc                    RCC_APB2Periph_GPIOB
+#define led1_gpio                   GPIOB
+#define led1_pin                    (GPIO_Pin_5)
 
 
-#define led2_rcc                    RCC_APB2Periph_GPIOA
-#define led2_gpio                   GPIOA
+#define led2_rcc                    RCC_APB2Periph_GPIOB
+#define led2_gpio                   GPIOB
 #define led2_pin                    (GPIO_Pin_5)
 
 #endif // led define #ifdef STM32_SIMULATOR

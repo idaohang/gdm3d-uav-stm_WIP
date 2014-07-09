@@ -34,7 +34,9 @@
 
 // <o> Internal SRAM memory size[Kbytes] <8-64>
 //	<i>Default: 64
-#define STM32_SRAM_SIZE         64
+//Modified by roice, 20140709, to make it suitable for STM32F103C8T6
+//#define STM32_SRAM_SIZE         64
+#define STM32_SRAM_SIZE         20
 #define STM32_SRAM_END          (0x20000000 + STM32_SRAM_SIZE * 1024)
 
 /* USART driver select. */

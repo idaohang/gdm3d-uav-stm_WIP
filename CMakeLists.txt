@@ -77,10 +77,10 @@ set (SrcRTTDriver ${PROJECT_SOURCE_DIR}/../RT-Thread_1.2.0/components/drivers/se
 # source RTT component common
 set (SrcRTTCPCommon ${PROJECT_SOURCE_DIR}/../RT-Thread_1.2.0/components/init/components.c)
 # source RTT component finsh
-aux_source_directory (${PROJECT_SOURCE_DIR}/../RT-Thread_1.2.0/components/finsh SrcRTTCPFinsh)
+#aux_source_directory (${PROJECT_SOURCE_DIR}/../RT-Thread_1.2.0/components/finsh SrcRTTCPFinsh)
 
 #++++++++++++++++++ Compile +++++++++++++++++++++++
-add_executable (${CMAKE_PROJECT_NAME}.elf ${SrcUser} ${SrcStartup} ${SrcDriver} ${SrcStm32f10xperiph} ${SrcCortexM3} ${SrcCMSIS} ${SrcRTTKernel} ${SrcRTTDriver} ${SrcRTTCPCommon} ${SrcRTTCPFinsh})
+add_executable (${CMAKE_PROJECT_NAME}.elf ${SrcUser} ${SrcStartup} ${SrcDriver} ${SrcStm32f10xperiph} ${SrcCortexM3} ${SrcCMSIS} ${SrcRTTKernel} ${SrcRTTDriver} ${SrcRTTCPCommon})# ${SrcRTTCPFinsh})
 ################# Convert elf to hex and bin ##########
 ADD_CUSTOM_TARGET(${CMAKE_PROJECT_NAME}.hex ALL DEPENDS ${CMAKE_PROJECT_NAME}.elf COMMAND ${CMAKE_OBJCOPY} -Oihex ${CMAKE_PROJECT_NAME}.elf ${CMAKE_PROJECT_NAME}.hex)
 
