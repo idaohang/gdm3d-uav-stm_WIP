@@ -41,10 +41,13 @@
 #endif
 
 #include "led.h"
+#include "app_simplewifi_conf.h"
 
 ALIGN(RT_ALIGN_SIZE)
 static rt_uint8_t led_stack[ 512 ];
+static rt_uint8_t app_wifi_udp_stack[ 512 ];
 static struct rt_thread led_thread;
+static struct rt_thread app_wifi_udp_thread;
 static void led_thread_entry(void* parameter)
 {
     unsigned int count=0;
@@ -55,7 +58,7 @@ static void led_thread_entry(void* parameter)
     {
         /* led1 on */
 #ifndef RT_USING_FINSH
-        rt_kprintf("led on, count : %d\r\n",count);
+//        rt_kprintf("led on, count : %d\r\n",count);
 #endif
         count++;
         rt_hw_led_on(0);
@@ -63,11 +66,16 @@ static void led_thread_entry(void* parameter)
 
         /* led1 off */
 #ifndef RT_USING_FINSH
-        rt_kprintf("led off\r\n");
+//        rt_kprintf("led off\r\n");
 #endif
         rt_hw_led_off(0);
         rt_thread_delay( RT_TICK_PER_SECOND/2 );
     }
+}
+
+static void app_wifi_udp_thread_entry(void* parameter)
+{
+    app_simplewifi_init();
 }
 
 #ifdef RT_USING_RTGUI
@@ -147,6 +155,7 @@ int rt_application_init(void)
 {
     rt_thread_t init_thread;
 
+
     rt_err_t result;
 
     /* init led thread */
@@ -176,6 +185,19 @@ int rt_application_init(void)
     if (init_thread != RT_NULL)
         rt_thread_startup(init_thread);
 
+    /* User app thread init */
+    result = rt_thread_init(&app_wifi_udp_thread,
+                            "app_wifi_udp",
+                            app_wifi_udp_thread_entry,
+                            RT_NULL,
+                            (rt_uint8_t*)&app_wifi_udp_stack[0],
+                            sizeof(app_wifi_udp_stack),
+                            19,
+                            20);
+    if (result == RT_EOK)
+    {
+        rt_thread_startup(&app_wifi_udp_thread);
+    }
     return 0;
 }
 

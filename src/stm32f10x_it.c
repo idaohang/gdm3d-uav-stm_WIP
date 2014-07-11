@@ -23,8 +23,16 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f10x_it.h"
+
+// Added by roice, 20140709, for uIP
+#include "stm32f10x_exti.h"
+//#include "enc28j60.h"
+
 #include <board.h>
 #include <rtthread.h>
+
+// Added by roice, 20140709, for uIP
+//extern unsigned char ETH_INT;//set flag for receiving completed
 
 /** @addtogroup Template_Project
   * @{
@@ -144,6 +152,17 @@ void EXTI4_IRQHandler(void)
 }
 #endif /* RT_USING_LWIP */
 
+// Added by roice, 20140709, for uIP
+/*
+void EXTI1_IRQHandler(void)
+{
+  if(EXTI_GetITStatus(EXTI_Line1) != RESET)				  //判别是否有键按下
+  {
+	ETH_INT=1;											  //设置接收完成标志
+    EXTI_ClearITPendingBit(EXTI_Line1);					  //清除中断请求标志
+  }
+}
+*/
 /**
   * @}
   */

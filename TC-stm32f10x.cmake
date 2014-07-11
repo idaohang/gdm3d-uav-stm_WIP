@@ -28,7 +28,7 @@ set (MCFLAGS "-mcpu=${MCU_CORE} -mthumb -ffunction-sections -fdata-sections -D${
 
 # set assembly and c language compile flags
 set (CMAKE_ASM_FLAGS "-c ${MCFLAGS} -x assembler-with-cpp")
-set (CMAKE_C_FLAGS "${MCFLAGS} -Wall")  
+set (CMAKE_C_FLAGS "${MCFLAGS} -Wall -Werror")  
 # debug version compile flags
 # -gstabs generate debug info as stabs format, gdb debug info excluded
 # -gstabs+ generate debug info as stabs format, gdb debug info included
