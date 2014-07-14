@@ -25,18 +25,19 @@
 
 #include "rtthread.h"
 
-/* UASR receive message structure */
+/* USAR receive message structure */
 struct rx_msg
 {
     rt_device_t dev;
     rt_size_t   size;
 };
 /* message queue for receiving message */
-static rt_mq_t  rx_mq;
+static struct rt_messagequeue  rx_messagequeue;
+static rt_mq_t rx_mq = &rx_messagequeue;
 /* mem pool for message queue */
 static char msg_pool[1024];
 /* receiving buffer for uart thread */
-static char uart_rx_buffer[64];
+//static char uart_rx_buffer[64];
 
 /* Callback Function */
 rt_err_t uart_input(rt_device_t dev, rt_size_t size)
@@ -46,7 +47,7 @@ rt_err_t uart_input(rt_device_t dev, rt_size_t size)
     msg.size = size;
 rt_kprintf(" i am in the callback function now ");
     /* send message to the queue */
-    rt_mq_send(rx_mq, &msg, sizeof(struct rx_msg));
+    rt_mq_send(rx_mq, &msg, sizeof(struct rt_messagequeue));
     rt_kprintf(" sent to the message ");
     return RT_EOK;
 }
@@ -66,9 +67,11 @@ int app_simplewifi_init(void)
     rt_err_t result = RT_EOK;
 char send_instruction[20];
 
+rx_mq = &rx_messagequeue;
+
 rt_kprintf(" start initiating message queue ");
 /* initiating message queue */
-rt_mq_init(rx_mq, "uart2_rx_mq", &msg_pool[0], 128-sizeof(void*), sizeof(msg_pool), RT_IPC_FLAG_FIFO);
+rt_mq_init(rx_mq, "uart2_rx_mq", &msg_pool[0], sizeof(struct rx_msg), sizeof(msg_pool), RT_IPC_FLAG_FIFO);
 
 	/* start initiating serial device uart2 */
     rt_kprintf(" Start initiating serial device uart2... \r\n");
@@ -110,11 +113,8 @@ send_instruction[17]='e';
 send_instruction[18]=0x0d;
 send_instruction[19]='\0';
 
-while(1)
-{
-
 rt_kprintf("start sending");
-    rt_device_write(device, 0, &send_instruction[0], 20);
+    rt_device_write(device, 0, &send_instruction[0], 19);
     //rt_device_write(device, 0, "AT+UART=?baud rate", 7);
     result = rt_mq_recv(rx_mq, &msg, sizeof(struct rx_msg), 50);
 rt_kprintf("result == %d", result);
@@ -125,18 +125,18 @@ rt_kprintf("result == %d", result);
     if(result == RT_EOK)
     {
         rt_kprintf("result == RT_EOK");
-        rt_uint32_t rx_length;
-        rx_length = (sizeof(uart_rx_buffer)-1) > msg.size ? msg.size : sizeof(uart_rx_buffer) - 1;
-        rx_length = rt_device_read(msg.dev, 0, &uart_rx_buffer[0], rx_length);
-        uart_rx_buffer[rx_length] = '\0';
+        //rt_uint32_t rx_length;
+        //rx_length = (sizeof(uart_rx_buffer)-1) > msg.size ? msg.size : sizeof(uart_rx_buffer) - 1;
+        //rx_length = rt_device_read(msg.dev, 0, &uart_rx_buffer[0], rx_length);
+        //uart_rx_buffer[rx_length] = '\0';
        
 
 
-        if(device != RT_NULL)
-            rt_device_write(device, 0, &uart_rx_buffer[0], rx_length);
-        rt_kprintf(uart_rx_buffer);
+        //if(device != RT_NULL)
+        //    rt_device_write(device, 0, &uart_rx_buffer[0], rx_length);
+        //rt_kprintf(uart_rx_buffer);
     }
-}
+
     return 0;
 }
 
